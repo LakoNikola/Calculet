@@ -37,20 +37,21 @@ class ViewController: UIViewController {
 
 extension ViewController: TableViewDelegate {
     func didSelectStudent(_ student: String) {
-        setStudentList.insert(student)
+        arrayStudentList.append(student)
         tableViewController.reloadData()
     }
    
 }
 
 
-extension ViewController: UITableViewDataSource {
+extension ViewController: UITableViewDataSource, UITableViewDelegate {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return setStudentList.count
+       // return setStudentList.count
+        return arrayStudentList.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        arrayStudentList = Array(setStudentList).sorted()
+        arrayStudentList = arrayStudentList.sorted()
         let cell = tableView.dequeueReusableCell(withIdentifier: "TableCellView", for: indexPath) as! LabelNameTableCell
         
         cell.labelNameView.text = arrayStudentList[indexPath.row]
@@ -59,12 +60,28 @@ extension ViewController: UITableViewDataSource {
         
     }
     func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-        if setStudentList.isEmpty {
+        if arrayStudentList.isEmpty {
             return nil
         } else {
         return "Количиство: \(arrayStudentList.count)"
         }
     }
     
+    func tableView(_ tableView: UITableView, editingStyleForRowAt indexPath: IndexPath) -> UITableViewCell.EditingStyle {
+        return .delete
+    }
+
+
+    func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
+        if editingStyle == .delete {
+            tableViewController.beginUpdates()
+            arrayStudentList.remove(at: indexPath.row)
+            tableViewController.deleteRows(at: [indexPath], with: .fade)
+            tableViewController.endUpdates()
+            tableViewController.reloadData()
+            
+        }
+    }
     
-}
+    }
+
