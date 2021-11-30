@@ -11,8 +11,6 @@ class ViewController: UIViewController {
    
  
     var arrayStudentList:[String] = []
-    var setStudentList = Set<String>()
-    
     
     @IBOutlet weak var tableViewController: UITableView!
     
@@ -24,13 +22,13 @@ class ViewController: UIViewController {
         let vc = storyboard.instantiateViewController(withIdentifier: "Main") as! TableView
         vc.delegate = self
         present(vc, animated: true, completion: nil)
+        
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
     
     }
-    
 }
 
 
@@ -46,16 +44,14 @@ extension ViewController: TableViewDelegate {
 
 extension ViewController: UITableViewDataSource, UITableViewDelegate {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-       // return setStudentList.count
         return arrayStudentList.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        arrayStudentList = arrayStudentList.sorted()
+        arrayStudentList.sort()
         let cell = tableView.dequeueReusableCell(withIdentifier: "TableCellView", for: indexPath) as! LabelNameTableCell
         
         cell.labelNameView.text = arrayStudentList[indexPath.row]
-        
         return cell
         
     }
@@ -79,9 +75,6 @@ extension ViewController: UITableViewDataSource, UITableViewDelegate {
             tableViewController.deleteRows(at: [indexPath], with: .fade)
             tableViewController.endUpdates()
             tableViewController.reloadData()
-            
         }
     }
-    
     }
-
